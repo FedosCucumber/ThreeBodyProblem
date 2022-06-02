@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Исходные файлы">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Файлы заголовков">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Файлы ресурсов">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Исходные файлы\ImGuiSrc">
+      <UniqueIdentifier>{29bdb507-73b3-49ba-a52d-eefc69bd67b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\ImGuiHeads">
+      <UniqueIdentifier>{bdcc8143-02cc-497f-804c-aeff80c12faa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\OpenGL">
+      <UniqueIdentifier>{fa38b1a5-ebc4-494e-a9eb-a686d28933dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\OpenGL">
+      <UniqueIdentifier>{316ad664-0341-4555-8a64-1d1357b2e725}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\GLObjects">
+      <UniqueIdentifier>{2919959e-f7e1-408e-b8ba-3b888520ebe2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ThreeManProblem.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui.cpp">
+      <Filter>Исходные файлы\ImGuiSrc</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_demo.cpp">
+      <Filter>Исходные файлы\ImGuiSrc</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_draw.cpp">
+      <Filter>Исходные файлы\ImGuiSrc</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_impl_glfw_gl3.cpp">
+      <Filter>Исходные файлы\ImGuiSrc</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Исходные файлы\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Исходные файлы\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexArray.cpp">
+      <Filter>Исходные файлы\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexBuffer.cpp">
+      <Filter>Исходные файлы\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="IndexBuffer.cpp">
+      <Filter>Исходные файлы\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderStorageBuffer.cpp">
+      <Filter>Исходные файлы\OpenGL</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\vendor\ImGui\imconfig.h">
+      <Filter>Файлы заголовков\ImGuiHeads</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendor\ImGui\imgui.h">
+      <Filter>Файлы заголовков\ImGuiHeads</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendor\ImGui\imgui_impl_glfw_gl3.h">
+      <Filter>Файлы заголовков\ImGuiHeads</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendor\ImGui\imgui_internal.h">
+      <Filter>Файлы заголовков\ImGuiHeads</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendor\ImGui\stb_rect_pack.h">
+      <Filter>Файлы заголовков\ImGuiHeads</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendor\ImGui\stb_textedit.h">
+      <Filter>Файлы заголовков\ImGuiHeads</Filter>
+    </ClInclude>
+    <ClInclude Include="..\vendor\ImGui\stb_truetype.h">
+      <Filter>Файлы заголовков\ImGuiHeads</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Файлы заголовков\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Файлы заголовков\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexArray.h">
+      <Filter>Файлы заголовков\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexBuffer.h">
+      <Filter>Файлы заголовков\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexBufferLayout.h">
+      <Filter>Файлы заголовков\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="IndexBuffer.h">
+      <Filter>Файлы заголовков\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderStorageBuffer.h">
+      <Filter>Файлы заголовков\OpenGL</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Basic.shader">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+    <None Include="BodyShader.shader">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+  </ItemGroup>
+</Project>
