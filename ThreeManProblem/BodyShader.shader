@@ -4,7 +4,7 @@
 layout(location = 0) in vec4 position;
 layout(std430, binding = 3) buffer Stuff
 {
-	vec4 data[40];
+	vec4 data[];
 };
 
 uniform mat4 u_MVP;

@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <memory>
+#include <vector>
+#include <random>
 
 #include <imgui.h>
 #include <imgui_impl_glfw_gl3.h>
@@ -50,6 +52,18 @@ public:
 
 int main(void)
 {
+
+
+    unsigned n;
+    std::cout << "Number of bodies to be created: ";
+    std::cin >> n;
+
+    if (n > 100)
+    {
+        std::cout << "You can create only up to 100 bodies";
+        return 0;
+    }
+
     GLFWwindow* window;
     //GLCheckError();
 
@@ -86,21 +100,20 @@ int main(void)
         }
         float position[3] = { 0.0f, 0.0f, 0.0f };
         unsigned int indicies[1] = { 0 };
-        glm::vec4 line_points[40];
-        for (unsigned i = 0; i < 40; ++i)
+        glm::vec4* line_points = static_cast <glm::vec4*> (std::malloc(n * 10 * sizeof(glm::vec4)));
+        for (unsigned i = 0; i < n * 10; ++i)
         {
             line_points[i] = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
         }
-        unsigned int indicies_lines[10] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
-        // Focking hell, Tommy
+        unsigned int indicies_lines[10] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
         glPointSize(20.0f);
         glLineWidth(10.0f);
 
-        Body* bods = static_cast <Body*>( std::malloc(sizeof(Body) * 4));
+        Body* bods = static_cast <Body*>( std::malloc(sizeof(Body) * n));
 
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < n; i++)
         {
             new (bods + i) Body(position, indicies, indicies_lines);
         }
@@ -113,49 +126,55 @@ int main(void)
         glm::vec3 moving(0.0f, 0.0f, -120.0f);
 
 
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glClearDepth(-50.f);         // Set background depth to farthest
-        glEnable(GL_DEPTH_TEST);   // Enable depth testing for z-culling
-        glDepthFunc(GL_GREATER);   // Set the type of depth-test
-        glShadeModel(GL_SMOOTH);   // Enable smooth shading
-        glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-        glDepthMask(GL_TRUE);
-        glDepthRange(50.0f, -50.0f);
+        GLcall(glEnable(GL_BLEND));                                    // Enable blending
+        GLcall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));     // Set blending function
+        GLcall(glClearDepth(-50.f));                                   // Set background depth to farthest
+        GLcall(glEnable(GL_DEPTH_TEST));                               // Enable depth testing for z-culling
+        GLcall(glDepthFunc(GL_GREATER));                               // Set the type of depth-test
+        GLcall(glShadeModel(GL_SMOOTH));                               // Enable smooth shading
+        GLcall(glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST));     // Set perspective correction ppolicy. 
+        GLcall(glDepthMask(GL_TRUE));                                  // Enable writing to depth buffer
 
-        ShaderStorageBuffer ssbo(line_points, 40 * sizeof(glm::vec4));
+        ShaderStorageBuffer ssbo(line_points, n * 10 * sizeof(glm::vec4));
 
         ssbo.Unbind();
 
 
-        float colors[16] =
+        float colors[32] =
         {
-            0.0f, 0.0f, 0.0f, 1.0f,
-            1.0f, 0.0f, 0.0f, 1.0f,
-            0.0f, 1.0f, 0.0f, 1.0f,
-            0.0f, 0.0f, 1.0f, 1.0f
+            0.0f,   0.0f,  0.0f,   1.0f,
+            1.0f,   0.0f,  0.0f,   1.0f,
+            0.0f,   1.0f,  0.0f,   1.0f,
+            0.0f,   0.0f,  1.0f,   1.0f,
+            0.95f,  0.02f, 1.0f,   1.0f, 
+            1.0f,   1.0f,  0.02f,  1.0f,
+            1.0f,   0.5f,  0.02f,  1.0f,
+            0.0f,   1.0f,  1.0f,   1.0f,
         };
 
-        glm::vec3 pos[4]
-        {
-            glm::vec3(0.0f,  0.0f,   10.0f),
-            glm::vec3(20.0f, 0.0f,   20.0f),
-            glm::vec3(5.0f,  10.0f, -10.0f),
-            glm::vec3(10.0f, 10.0f, -20.0f),
-        };
 
-        glm::vec3 speed[4]
-        {
-            glm::vec3(0.0f, 0.0f, 0.0f),
-            glm::vec3(0.0f, 0.0f, 0.0f),
-            glm::vec3(0.0f, 0.0f, 0.0f),
-            glm::vec3(0.0f, 0.0f, 0.0f),
-        };
 
-        float mass[4] =
+        std::random_device dev;
+        std::mt19937 engine(dev());
+        std::uniform_int_distribution <int> distr(-50, 50);
+
+
+
+
+        std::vector <glm::vec3> pos(n);
+
+        for (auto& vec : pos)
         {
-            1.0f, 50.0f, 1.0f, 1.0f
-        };
+            vec.x = distr(engine);
+            vec.y = distr(engine);
+            vec.z = distr(engine) % 10;
+        }
+        std::vector <glm::vec3> speed(n);
+        std::vector <float> mass(n);
+        for (auto& _Mass : mass)
+        {
+            _Mass = std::abs(distr(engine)) + 1;
+        }
 
 
 
@@ -171,19 +190,18 @@ int main(void)
             ImGui_ImplGlfwGL3_NewFrame();
             {
                 ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-                ImGui::SliderFloat("Move", &moving.z, -100.0f, -50.0f);
+                ImGui::SliderFloat("Move", &moving.z, -300.0f, -50.0f);
                 ImGui::SliderFloat2("Move", &moving.x, -100.0f, 100.0f);
             }
 
 
-            glm::vec3 new_pos[4] = { pos[0], pos[1], pos[2], pos[3] };
+            std::vector <glm::vec3> new_pos = pos;
 
-            for (int i = 0; i < 4; ++i)
+            for (int i = 0; i < n; ++i)
             {
                 glm::vec3 force(0.0f, 0.0f, 0.0f);
-                for (int j = 0; j < 4; j++)
+                for (int j = 0; j < n; j++)
                 {
-                   // std::cout << glm::length(pos[i] - pos[j]) << std::endl;
                     auto dist3 = glm::length(pos[i] - pos[j]) * glm::length(pos[i] - pos[j]) * glm::length(pos[i] - pos[j]) + 1.0f;
                     if (dist3) {
                         force += (pos[i] - pos[j]) *  float(-1.0f / dist3) * 30.0f * mass[j];
@@ -195,7 +213,7 @@ int main(void)
                 new_pos[i] = pos[i] + speed[i] * (1.0f / 60);
             
                 bods[i].BodyShader.Bind();
-                bods[i].BodyShader.SetUniform4f("u_Color", colors[i * 4], colors[i * 4 + 1], colors[i * 4 + 2], colors[i * 4 + 3]);
+                bods[i].BodyShader.SetUniform4f("u_Color", colors[(i % 8) * 4], colors[(i % 8) * 4 + 1], colors[(i % 8) * 4 + 2], colors[(i % 8) * 4 + 3]);
 
                 ssbo.Bind();
                 glm::mat4 temp = glm::translate(glm::mat4(1.0f), moving + new_pos[i]);
@@ -213,7 +231,7 @@ int main(void)
 
                 bods[i].LineShader.Bind();
                 bods[i].LinesIb.Bind();
-                bods[i].LineShader.SetUniform4f("u_Color", colors[i * 4], colors[i * 4 + 1], colors[i * 4 + 2], colors[i * 4 + 3]);
+                bods[i].LineShader.SetUniform4f("u_Color", colors[(i % 8) * 4], colors[(i % 8) * 4 + 1], colors[(i % 8) * 4 + 2], colors[(i % 8) * 4 + 3]);
                 bods[i].LineShader.SetUniform1i("u_Index", i);
 
 
@@ -224,10 +242,7 @@ int main(void)
             }
 
 
-            pos[0] = new_pos[0];
-            pos[1] = new_pos[1];
-            pos[2] = new_pos[2];
-            pos[3] = new_pos[3];
+            pos = new_pos;
 
 
             // Make a loop, faggot

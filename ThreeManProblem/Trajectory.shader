@@ -3,7 +3,7 @@
 
 layout(std430, binding = 3) buffer Stuff
 {
-	vec4 data[40];
+	vec4 data[];
 };
 
 uniform int u_Index;
