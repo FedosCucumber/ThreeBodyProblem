@@ -179,7 +179,7 @@
     <ClInclude Include="VertexBufferLayout.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Basic.shader" />
+    <None Include="Trajectory.shader" />
     <None Include="BodyShader.shader" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

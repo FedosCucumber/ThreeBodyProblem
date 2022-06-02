@@ -14,9 +14,6 @@
 #include "ShaderStorageBuffer.h"
 
 
-const long double AU = 149.597870700;
-const long double G =  0.0000000006743;
-const long double MASS = 5972200000000000;
 
 class Body
 {
@@ -38,7 +35,7 @@ public:
         BodyVb(pos, 1 * 3 * sizeof(float)),
         LinesIb(Lines, 10),
         BodyShader("BodyShader.shader"),
-        LineShader("Basic.shader")
+        LineShader("Trajectory.shader")
     {
         layout.Push <float>(3);
 
@@ -89,29 +86,11 @@ int main(void)
         }
         float position[3] = { 0.0f, 0.0f, 0.0f };
         unsigned int indicies[1] = { 0 };
-        float line_points[160] =
+        glm::vec4 line_points[40];
+        for (unsigned i = 0; i < 40; ++i)
         {
-            0.0f, 0.0f, 0.0f, 0.0f,
-            0.0f, 0.0f, 0.0f, 0.0f,
-            0.0f, 0.0f, 0.0f, 0.0f,
-            0.0f, 0.0f, 0.0f, 0.0f,
-            0.0f, 0.0f, 0.0f, 0.0f,
-            0.0f, 0.0f, 0.0f, 0.0f,
-            0.0f, 0.0f, 0.0f, 0.0f,
-            0.0f, 0.0f, 0.0f, 0.0f,
-            0.0f, 0.0f, 0.0f, 0.0f,
-            0.0f, 0.0f, 0.0f, 0.0f,
-            0.0f, 0.0f, 0.0f, 0.0f,
-            0.0f, 0.0f, 0.0f, 0.0f,
-            0.0f, 0.0f, 0.0f, 0.0f,
-            0.0f, 0.0f, 0.0f, 0.0f,
-            0.0f, 0.0f, 0.0f, 0.0f,
-            0.0f, 0.0f, 0.0f, 0.0f,
-            0.0f, 0.0f, 0.0f, 0.0f,
-            0.0f, 0.0f, 0.0f, 0.0f,
-            0.0f, 0.0f, 0.0f, 0.0f,
-            0.0f, 0.0f, 0.0f, 0.0f
-        };
+            line_points[i] = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
+        }
         unsigned int indicies_lines[10] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
         // Focking hell, Tommy
@@ -131,7 +110,7 @@ int main(void)
         glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f));
         glm::mat4 projection = glm::perspective(45.0f, 1920.0f / 1080.0f, 50.0f, -50.0f);
 
-        glm::vec3 moving(0.0f, 0.0f, -100.0f);
+        glm::vec3 moving(0.0f, 0.0f, -120.0f);
 
 
         glEnable(GL_BLEND);
@@ -144,7 +123,7 @@ int main(void)
         glDepthMask(GL_TRUE);
         glDepthRange(50.0f, -50.0f);
 
-        ShaderStorageBuffer ssbo(line_points, sizeof(float) * 4 * 40);
+        ShaderStorageBuffer ssbo(line_points, 40 * sizeof(glm::vec4));
 
         ssbo.Unbind();
 
@@ -159,8 +138,8 @@ int main(void)
 
         glm::vec3 pos[4]
         {
-            glm::vec3(0.0f,  0.0f,  10.0f),
-            glm::vec3(20.0f, 0.0f,  20.0f),
+            glm::vec3(0.0f,  0.0f,   10.0f),
+            glm::vec3(20.0f, 0.0f,   20.0f),
             glm::vec3(5.0f,  10.0f, -10.0f),
             glm::vec3(10.0f, 10.0f, -20.0f),
         };
@@ -175,7 +154,7 @@ int main(void)
 
         float mass[4] =
         {
-            1.0f, 10.0f, 1.0f, 1.0f
+            1.0f, 50.0f, 1.0f, 1.0f
         };
 
 
@@ -205,7 +184,7 @@ int main(void)
                 for (int j = 0; j < 4; j++)
                 {
                    // std::cout << glm::length(pos[i] - pos[j]) << std::endl;
-                    auto dist3 = glm::length(pos[i] - pos[j]) * glm::length(pos[i] - pos[j]) * glm::length(pos[i] - pos[j]) + 0.1f;
+                    auto dist3 = glm::length(pos[i] - pos[j]) * glm::length(pos[i] - pos[j]) * glm::length(pos[i] - pos[j]) + 1.0f;
                     if (dist3) {
                         force += (pos[i] - pos[j]) *  float(-1.0f / dist3) * 30.0f * mass[j];
                     }

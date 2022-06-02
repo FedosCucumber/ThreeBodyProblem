@@ -109,7 +109,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Basic.shader">
+    <None Include="Trajectory.shader">
       <Filter>Файлы ресурсов</Filter>
     </None>
     <None Include="BodyShader.shader">
