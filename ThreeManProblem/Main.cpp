@@ -58,11 +58,7 @@ int main(void)
     std::cout << "Number of bodies to be created: ";
     std::cin >> n;
 
-    if (n > 100)
-    {
-        std::cout << "You can create only up to 100 bodies";
-        return 0;
-    }
+   
 
     GLFWwindow* window;
     //GLCheckError();
@@ -156,7 +152,7 @@ int main(void)
 
         std::random_device dev;
         std::mt19937 engine(dev());
-        std::uniform_int_distribution <int> distr(-50, 50);
+        std::uniform_int_distribution <int> distr(-90, 90);
 
 
 
