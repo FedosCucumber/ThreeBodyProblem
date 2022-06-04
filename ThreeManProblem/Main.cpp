@@ -107,11 +107,32 @@ int main(void)
         glPointSize(20.0f);
         glLineWidth(10.0f);
 
+        float colors[32] =
+        {
+            0.0f,   0.0f,  0.0f,   1.0f,
+            1.0f,   0.0f,  0.0f,   1.0f,
+            0.0f,   1.0f,  0.0f,   1.0f,
+            0.0f,   0.0f,  1.0f,   1.0f,
+            0.95f,  0.02f, 1.0f,   1.0f, 
+            1.0f,   1.0f,  0.02f,  1.0f,
+            1.0f,   0.5f,  0.02f,  1.0f,
+            0.0f,   1.0f,  1.0f,   1.0f,
+        };
+
         Body* bods = static_cast <Body*>( std::malloc(sizeof(Body) * n));
 
         for (int i = 0; i < n; i++)
         {
             new (bods + i) Body(position, indicies, indicies_lines);
+
+            bods[i].BodyShader.Bind();
+            bods[i].BodyShader.SetUniform4f("u_Color", colors[(i % 8) * 4], colors[(i % 8) * 4 + 1], colors[(i % 8) * 4 + 2], colors[(i % 8) * 4 + 3]);
+            bods[i].BodyShader.SetUniform1i("u_Index", i);
+            bods[i].BodyShader.Unbind();
+            bods[i].LineShader.Bind();
+            bods[i].LineShader.SetUniform4f("u_Color", colors[(i % 8) * 4], colors[(i % 8) * 4 + 1], colors[(i % 8) * 4 + 2], colors[(i % 8) * 4 + 3]);
+            bods[i].LineShader.SetUniform1i("u_Index", i);
+            bods[i].LineShader.Unbind();
         }
 
 
@@ -135,18 +156,6 @@ int main(void)
 
         ssbo.Unbind();
 
-
-        float colors[32] =
-        {
-            0.0f,   0.0f,  0.0f,   1.0f,
-            1.0f,   0.0f,  0.0f,   1.0f,
-            0.0f,   1.0f,  0.0f,   1.0f,
-            0.0f,   0.0f,  1.0f,   1.0f,
-            0.95f,  0.02f, 1.0f,   1.0f, 
-            1.0f,   1.0f,  0.02f,  1.0f,
-            1.0f,   0.5f,  0.02f,  1.0f,
-            0.0f,   1.0f,  1.0f,   1.0f,
-        };
 
 
 
@@ -209,12 +218,10 @@ int main(void)
                 new_pos[i] = pos[i] + speed[i] * (1.0f / 60);
             
                 bods[i].BodyShader.Bind();
-                bods[i].BodyShader.SetUniform4f("u_Color", colors[(i % 8) * 4], colors[(i % 8) * 4 + 1], colors[(i % 8) * 4 + 2], colors[(i % 8) * 4 + 3]);
 
                 ssbo.Bind();
                 glm::mat4 temp = glm::translate(glm::mat4(1.0f), moving + new_pos[i]);
                 bods[i].BodyShader.SetUniformMat4f("u_MVP", projection * view * model * temp);
-                bods[i].BodyShader.SetUniform1i("u_Index", i);
 
                 bods[i].BodyArr.Bind();
                 bods[i].BodyIb.Bind();
@@ -227,8 +234,7 @@ int main(void)
 
                 bods[i].LineShader.Bind();
                 bods[i].LinesIb.Bind();
-                bods[i].LineShader.SetUniform4f("u_Color", colors[(i % 8) * 4], colors[(i % 8) * 4 + 1], colors[(i % 8) * 4 + 2], colors[(i % 8) * 4 + 3]);
-                bods[i].LineShader.SetUniform1i("u_Index", i);
+                
 
 
                 glDrawElements(GL_LINE_STRIP, bods[i].LinesIb.GetCount(), GL_UNSIGNED_INT, nullptr);
